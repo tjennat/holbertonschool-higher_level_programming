@@ -1,3 +1,3 @@
 #!/usr/bin/python3
-import string
-print(string.ascii_lowercase, end='')
+for ch in range(97, 123):
+    print(chr(ch),end='')
