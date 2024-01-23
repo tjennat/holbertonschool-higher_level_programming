@@ -14,4 +14,3 @@ if mod == 0:
 
 if mod < 6 and mod != 0:
     print(f"Last digit of {number} is {mod} and is less than 6 and not 0")
-    
