@@ -11,7 +11,8 @@ def roman_to_int(roman_string):
     total = 0
     for i in range(len(roman_list)):
         if i > 0 and roman_dict[roman_list[i]] > roman_dict[roman_list[i - 1]]:
-            total += roman_dict[roman_list[i]] - 2 * roman_dict[roman_list[i - 1]]
+            total += roman_dict[roman_list[i]]
+            total -= 2 * roman_dict[roman_list[i - 1]]
         else:
             total += roman_dict[roman_list[i]]
     return total
