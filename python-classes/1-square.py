@@ -9,4 +9,6 @@ class Square:
 def __init__(self, size):
     if isinstance(size, int):
         self.size = size
-    """empty instance attribute"""
+    else:
+        return None
+
