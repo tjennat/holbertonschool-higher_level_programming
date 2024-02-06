@@ -7,6 +7,10 @@ class Square:
 
     __size = None
 
+    @property
+    def size(self):
+        return self.__size
+    
     def __init__(self, __size=0):
         if not isinstance(__size, int):
             raise TypeError("size must be an integer")
@@ -20,6 +24,7 @@ class Square:
 
         return self.__size * self.__size
 
+    @size.setter
     def size(self, value):
         """getter function for size"""
         if not isinstance(value, int):
