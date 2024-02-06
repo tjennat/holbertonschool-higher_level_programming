@@ -7,5 +7,6 @@ class Square:
 
 
 def __init__(self, size):
-    self.size = size
+    if isinstance(size, int):
+        self.size = size
     """empty instance attribute"""
