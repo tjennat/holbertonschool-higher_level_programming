@@ -6,9 +6,6 @@ class Square:
     """empty class that defines a square."""
 
 
-def __init__(self):
-    self.size = 0
+def __init__(self, size):
+    self.size = size
     """empty instance attribute"""
-
-
-pass
