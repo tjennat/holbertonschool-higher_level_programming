@@ -5,10 +5,10 @@
 class Square:
     """empty class that defines a square."""
 
-    size = None
+    __size = None
 
-    def __init__(self, size):
-        if isinstance(size, int):
-            self.size = size
+    def __init__(self, __size):
+        if isinstance(__size, int):
+            self.__size = __size
         else:
             return None
