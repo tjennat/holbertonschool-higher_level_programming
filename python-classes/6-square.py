@@ -22,7 +22,7 @@ class Square:
     def area(self):
         """returns the current square area"""
 
-        return self.__size * self.__size
+        return self.__size ** 2
 
     @size.setter
     def size(self, value):
@@ -31,8 +31,7 @@ class Square:
             raise TypeError("size must be an integer")
         elif value < 0:
             raise ValueError("size must be >= 0")
-        else:
-            self.__size = value
+        self.__size = value
 
     def my_print(self):
         if self.__size == 0:
