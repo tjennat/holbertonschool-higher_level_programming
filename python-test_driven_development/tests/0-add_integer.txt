@@ -12,7 +12,7 @@ Using 'add'
 >>> add_integer(3.2, 2)
 5
 
->>> add_integer('a', 4)
+>>> add_integer("a", 4)
 Traceback (most recent call last):
     ...
 TypeError: a must be an integer
@@ -20,7 +20,7 @@ TypeError: a must be an integer
 >>> add_integer(5, 1.5)
 6
 
->>> add_integer(4, 'b')
+>>> add_integer(4, "b")
 Traceback (most recent call last):
     ...
 TypeError: b must be an integer
