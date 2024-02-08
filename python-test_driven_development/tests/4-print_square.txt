@@ -41,7 +41,7 @@ Traceback (most recent call last):
     ...
 TypeError: size must be an integer
 
->>> print_square(1.5)
+>>> print_square(None)
 Traceback (most recent call last):
     ...
 TypeError: size must be an integer
