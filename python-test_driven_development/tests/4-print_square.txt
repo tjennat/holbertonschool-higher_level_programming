@@ -40,3 +40,8 @@ TypeError: print_square() missing 1 required positional argument: 'size'
 Traceback (most recent call last):
     ...
 TypeError: size must be an integer
+
+>>> print_square(1.5)
+Traceback (most recent call last):
+    ...
+TypeError: size must be an integer
