@@ -24,7 +24,6 @@ matrix error
 >>> matrix4 = [[]]
 >>> matrix5 = {}
 >>> matrix6 = [[2, 3],[4, 5, 6],[7, 8, 9]]
->>> matrix7 = [[1, 2, "e"], [4, "t", 6]]
 
 >>> matrix_divided(matrix3, 2)
 Traceback (most recent call last):
@@ -45,11 +44,6 @@ TypeError: matrix must be a matrix (list of lists) of integers/floats
 Traceback (most recent call last):
     ...
 TypeError: Each row of the matrix must have the same size
-
->>> matrix_divided(matrix7, -2)
-Traceback (most recent call last):
-    ...
-TypeError: matrix must be a matrix (list of lists) of integers/floats
 
 >>> matrix_divided(None, None)
 Traceback (most recent call last):

@@ -3,6 +3,7 @@
 
 
 def matrix_divided(matrix, div):
+    """Divides all elements of a matrix."""
     if isinstance(matrix, list) is False:
         raise TypeError(
             "matrix must be a matrix (list of lists) of integers/floats")
