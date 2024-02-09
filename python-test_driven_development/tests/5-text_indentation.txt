@@ -29,3 +29,5 @@ TypeError: text_indentation() missing 1 required positional argument: 'text'
 Traceback (most recent call last):
     ...
 TypeError: text must be a string
+
+>>> text_indentation("")
