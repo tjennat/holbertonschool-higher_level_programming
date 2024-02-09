@@ -1,0 +1,17 @@
+The "text" module
+====================
+
+Using 'text'
+------------
+
+>>> text_indentation = __import__('5-text_indentation').text_indentation
+
+>>> text_indentation("hello. tio")
+hello.
+<BLANKLINE>
+tio
+
+>>> text_indentation(4)
+Traceback (most recent call last):
+    ...
+TypeError: text must be a string
