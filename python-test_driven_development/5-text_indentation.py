@@ -10,6 +10,8 @@ def text_indentation(text):
     if not isinstance(text, str):
         raise TypeError("text must be a string")
     for i in range(len(text)):
+        if i == " " and len(text) == 0:
+            continue
         if text[i] == " " and text[i - 1] in ".?:":
             continue
         print(text[i], end="")
