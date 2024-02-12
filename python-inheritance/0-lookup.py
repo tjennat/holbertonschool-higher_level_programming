@@ -3,5 +3,6 @@
 Returns a list of object
 """
 
+
 def lookup(obj):
     return dir(obj)
