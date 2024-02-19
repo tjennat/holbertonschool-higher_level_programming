@@ -7,7 +7,6 @@ class Base:
     """this class is going to be the base of the project"""
     __nb_objects = 0
 
-
     def __init__(self, id=None):
         """is the class constructor"""
         if id is not None:
