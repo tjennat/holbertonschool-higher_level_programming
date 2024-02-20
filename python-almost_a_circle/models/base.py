@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 """
 class that will be the base"""
-
+import json
 
 class Base:
     """this class is going to be the base of the project"""
