@@ -39,7 +39,7 @@ class Base:
         if json_string is None or len(json_string) == 0:
             return []
         return json.loads(json_string)
-    
+
     @classmethod
     def create(cls, **dictionary):
         if cls.__name__ == "Rectangle":
@@ -48,3 +48,13 @@ class Base:
             new = cls(1)
         new.update(**dictionary)
         return new
+
+    @classmethod
+    def load_from_file(cls):
+        filename = cls.__name__ + ".json"
+        try:
+            with open(filename, "r") as f:
+                list_dicts = cls.from_json_string(f.read())
+                return [cls.create(**d) for d in list_dicts]
+        except:
+            return []
