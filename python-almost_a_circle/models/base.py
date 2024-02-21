@@ -2,6 +2,7 @@
 """
 class that will be the base"""
 import json
+import os
 
 
 class Base:
@@ -52,9 +53,9 @@ class Base:
     @classmethod
     def load_from_file(cls):
         filename = cls.__name__ + ".json"
-        try:
-            with open(filename, "r") as f:
-                list_dicts = cls.from_json_string(f.read())
-                return [cls.create(**d) for d in list_dicts]
-        except:
+        if not os.path.exists(filename):
             return []
+        with open(filename, "r") as f:
+            json_str = f.read()
+            list_dict = cls.from_json_string(json_str)
+            return [cls.create(**d) for d in list_dict]
