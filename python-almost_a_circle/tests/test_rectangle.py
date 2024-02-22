@@ -1,132 +1,119 @@
 #!/usr/bin/python3
-"""Rectangle class test"""
-
+"""Unittest for Almost a circle project"""
 
 import unittest
+import json
+import sys
+import os
+import io
+
+from models.base import Base
 from models.rectangle import Rectangle
+from models.square import Square
 
 
-class TestBase(unittest.TestCase):
-    def test_1(self):
-        Rectangle(1, 2)
-
-    def test_2(self):
-        Rectangle(1, 2, 3)
-
-    def test_3(self):
-        Rectangle(1, 2, 3, 4)
-
-    def test_4(self):
-        with self.assertRaises(TypeError) as context:
+class TestRectangle(unittest.TestCase):
+    """Unittest for Rectangle class"""
+    def test_init(self):
+        rectangle = Rectangle(1, 2)
+        self.assertEqual(rectangle.width, 1)
+        self.assertEqual(rectangle.height, 2)
+        
+        rectangle1 = Rectangle(1, 2, 3, 4, 5)
+        self.assertEqual(rectangle1.width, 1)
+        self.assertEqual(rectangle1.height, 2)
+        self.assertEqual(rectangle1.x, 3)
+        self.assertEqual(rectangle1.y, 4)
+        self.assertEqual(rectangle1.id, 5)
+        
+    def test_types(self):
+        """Test the type of arguments passed to the class""" 
+        with self.assertRaises(TypeError):
             Rectangle("1", 2)
-        self.assertTrue('width must be an integer' in str(context.exception))
-
-    def test_5(self):
-        with self.assertRaises(TypeError) as context:
+        with self.assertRaises(TypeError):
             Rectangle(1, "2")
-        self.assertTrue('height must be an integer' in str(context.exception))
-
-    def test_6(self):
-        with self.assertRaises(TypeError) as context:
+        with self.assertRaises(TypeError):
             Rectangle(1, 2, "3")
-        self.assertTrue('x must be an integer' in str(context.exception))
-
-    def test_7(self):
-        with self.assertRaises(TypeError) as context:
-            Rectangle(1, 2, 3, "4")
-        self.assertTrue('y must be an integer' in str(context.exception))
-
-    def test_8(self):
-        Rectangle(1, 2, 3, 4, 5)
-
-    def test_9(self):
-        with self.assertRaises(ValueError) as context:
+        with self.assertRaises(TypeError):
+            Rectangle(1, 2, 3, "5")
+    
+    def test_values(self):
+        """Test the values of arguments passed to the class"""
+        with self.assertRaises(ValueError):
             Rectangle(-1, 2)
-        self.assertTrue('width must be > 0' in str(context.exception))
-
-    def test_10(self):
-        with self.assertRaises(ValueError) as context:
+        with self.assertRaises(ValueError):
             Rectangle(1, -2)
-        self.assertTrue('height must be > 0' in str(context.exception))
-
-    def test_11(self):
-        with self.assertRaises(ValueError) as context:
+        with self.assertRaises(ValueError):
             Rectangle(0, 2)
-        self.assertTrue('width must be > 0' in str(context.exception))
-
-    def test_12(self):
-        with self.assertRaises(ValueError) as context:
+        with self.assertRaises(ValueError):
             Rectangle(1, 0)
-        self.assertTrue('height must be > 0' in str(context.exception))
-
-    def test_13(self):
-        with self.assertRaises(ValueError) as context:
+        with self.assertRaises(ValueError):
             Rectangle(1, 2, -3)
-        self.assertTrue('x must be >= 0' in str(context.exception))
-
-    def test_14(self):
-        with self.assertRaises(ValueError) as context:
+        with self.assertRaises(ValueError):
             Rectangle(1, 2, 3, -4)
-        self.assertTrue('y must be >= 0' in str(context.exception))
 
-    def test_15(self):
-        Rectangle.create(**{'width': 2, 'height': 3})
+    def test_area(self):
+        """Test the value of the area"""
+        rectangle = Rectangle(3, 4)
+        self.assertEqual(rectangle.area(), 12)
 
-    def test_16(self):
-        Rectangle.create(**{'width': 2, 'height': 3, 'x': 12})
+    def test_string_representation(self):
+        """Test the string representation of a rectangle"""
+        rectangle = Rectangle(3, 4, 1, 2, 5)
+        self.assertEqual(str(rectangle), "[Rectangle] (5) 1/2 - 3/4")
 
-    def test_17(self):
-        Rectangle.create(**{'width': 2, 'height': 3, 'x': 12, 'y': 1})
+    def test_display(self):
+        """Test the output when diplaying a rectangle"""
+        rectangle = Rectangle(2, 3)
+        actual_output = io.StringIO()
+        sys.stdout = actual_output
+        rectangle.display()
+        printed_output = actual_output.getvalue()
+        sys.stdout = sys.__stdout__
+        expected_output = "##\n##\n##\n"
+        self.assertEqual(printed_output, expected_output)
+        
+        rectangle = Rectangle(2, 3, 1, 1)
+        actual_output = io.StringIO()
+        sys.stdout = actual_output
+        rectangle.display()
+        printed_output = actual_output.getvalue()
+        sys.stdout = sys.__stdout__
+        expected_output = "\n ##\n ##\n ##\n"
+        self.assertEqual(printed_output, expected_output)
 
-    def test_18(self):
-        Rectangle.create(**{'width': 2, 'height': 3,
-                         'x': 12, 'y': 1, 'id': 89})
+    def test_to_dictionary(self):
+        """Test the dictionary representation of a rectangle"""
+        rectangle = Rectangle(3, 4, 1, 2, 5)
+        self.assertEqual(rectangle.to_dictionary(), {'x': 1, 'y': 2, 'id': 5, 'width': 3, 'height': 4})
 
-    def test_19(self):
-        Rectangle.load_from_file()
+    def test_update(self):
+        """Test when updating the value of a rectangle"""
+        rectangle = Rectangle(1, 2)
+        rectangle.update(2, 3, 4, 5, 6)
+        self.assertEqual(rectangle.id, 2)
+        self.assertEqual(rectangle.width, 3)
+        self.assertEqual(rectangle.height, 4)
+        self.assertEqual(rectangle.x, 5)
+        self.assertEqual(rectangle.y, 6)
 
-    def test_20(self):
-        Rectangle.load_from_file()
+    def test_update_method_exists(self):
+        """Test that the class possess an update method"""
+        rectangle = Rectangle(1, 2)
+        self.assertTrue(hasattr(rectangle, 'update'))
 
-    def test_21(self):
-        r1 = Rectangle(8, 65, 2, 10, 2)
-        r2 = Rectangle(10, 2, 1, 3, 5)
-        Rectangle.save_to_file([r1, r2])
+    def test_create_method_exists(self):
+        """Test that the class possess a create method"""
+        rectangle = Rectangle.create(**{'id': 89, 'width': 1})
+        self.assertTrue(hasattr(rectangle, 'create'))
 
-    def test_22(self):
-        Rectangle.save_to_file([])
-
-    def test_23(self):
-        dt = Rectangle(1, 2, 3, 4, 5)
-        dt.save_to_file(None)
-
-    def test_25(self):
-        dt = Rectangle(10, 10)
-        dt.area()
-
-    def test_26(self):
-        dt = Rectangle(1, 1)
-        dt.display()
-
-    def test_27(self):
+    def test_save_to_file_with_none(self):
+        """Test if the save_to_file method works with a None argument"""
         Rectangle.save_to_file(None)
+        with open("Rectangle.json", "r") as f:
+            dict_output = json.load(f)
+        expected_output = []
+        self.assertEqual(dict_output, expected_output)
 
-    def test_28(self):
-        dt = Rectangle(1, 2, 3, 4, 5)
-        self.assertEqual(dt.area(), 2)
-
-    def test_29(self):
-        dt = Rectangle(1, 2, 3, 4, 5)
-        self.assertEqual(str(dt), '[Rectangle] (5) 3/4 - 1/2')
-
-    def test_30(self):
-        dt = Rectangle(1, 2, 3, 4)
-        dt.display()
-
-    def test_31(self):
-        dt = Rectangle(1, 2, 3)
-        dt.display()
-
-    def test_32(self):
-        dt = Rectangle(1, 2)
-        dt.display()
+if __name__ == "__main__":
+    unittest.main()

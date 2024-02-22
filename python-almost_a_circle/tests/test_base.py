@@ -1,58 +1,61 @@
 #!/usr/bin/python3
-"""Base class test"""
-
+"""Unittest for Almost a circle project"""
 
 import unittest
 from models.base import Base
+from models.rectangle import Rectangle
+from models.square import Square
 
 
 class TestBase(unittest.TestCase):
-    def test_1(self):
-        b1 = Base()
-        self.assertEqual(b1.id, 1)
+    """Test the Base class"""
+    def test_id(self):
+        """Check if ID is greater than 0"""
+        base = Base()
+        self.assertGreater(base.id, 0)
 
-    def test_2(self):
-        b1 = Base()
-        self.assertEqual(b1.id, 2)
+    def test_id_increment(self):
+        """Check if ID is equal to the previous + 1"""
+        base1 = Base()
+        base2 = Base()
+        
+        self.assertEqual(base2.id, base1.id + 1)
 
-    def test_3(self):
-        b1 = Base(100000)
-        self.assertEqual(b1.id, 100000)
+    def test_id_saving(self):
+        """Check if the id is saved correctly"""
+        base = Base(89)
+        
+        self.assertEqual(base.id, 89)
+    
+    def test_to_json_string_none(self):
+        """Check if method returns '[]' when input is None."""
+        base = Base.to_json_string(None)
+        self.assertEqual(base, "[]")
 
-    def test_4(self):
-        b1 = Base(1.1)
-        self.assertEqual(b1.id, 1.1)
+    def test_to_json_string_empty_list(self):
+        """Check if method returns '[]' when input is empty list."""
+        base = Base.to_json_string([])
+        self.assertEqual(base, "[]")
 
-    def test_5(self):
-        Base.to_json_string([])
+    def test_to_json_string_single_object(self):
+        """Check if method returns string representation of single object."""
+        base = Base.to_json_string([{'id': 12}])
+        self.assertEqual(base, '[{"id": 12}]')
 
-    def test_6(self):
-        Base.save_to_file([])
+    def test_from_json_string_none(self):
+        """Check if method returns empty list when input is None."""
+        base = Base.from_json_string(None)
+        self.assertEqual(base, [])
 
-    def test_7(self):
-        Base.save_to_file(None)
+    def test_from_json_string_empty_string(self):
+        """Check if method returns empty list when input is empty string."""
+        base = Base.from_json_string("[]")
+        self.assertEqual(base, [])
 
-    def test_8(self):
-        Base.to_json_string([])
+    def test_from_json_string_single_object(self):
+        """Check if method returns a list containing a single object."""
+        base = Base.from_json_string('[{"id": 89}]')
+        self.assertEqual(base, [{"id": 89}]) 
 
-    def test_9(self):
-        Base.to_json_string([{'id': 12}])
-
-    def test_10(self):
-        Base.from_json_string(None)
-
-    def test_11(self):
-        Base.from_json_string("[]")
-
-    def test_12(self):
-        Base.from_json_string("[]")
-
-    def test_13(self):
-        Base.from_json_string('[{ "id": 89 }]')
-
-    def test_14(self):
-        Base.from_json_string('[{ "id": 89 }]')
-
-
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

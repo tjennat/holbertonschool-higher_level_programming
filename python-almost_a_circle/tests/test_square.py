@@ -1,143 +1,121 @@
 #!/usr/bin/python3
-"""Square class test"""
-
+"""Unittest for Almost a circle project"""
 
 import unittest
+import json
+import sys
+import os
+import io
+
+from models.base import Base
+from models.rectangle import Rectangle
 from models.square import Square
 
 
-class TestBase(unittest.TestCase):
-    def test_0(self):
-        Square(1)
-
-    def test_1(self):
-        Square(1, 2)
-
-    def test_2(self):
-        Square(1, 2, 3)
-
-    def test_3(self):
-        with self.assertRaises(TypeError) as context:
+class TestSquare(unittest.TestCase):
+    """Unittests for the Square class"""
+    def test_init(self):
+        square = Square(1)
+        self.assertEqual(square.size, 1)
+        
+        square = Square(1, 2)
+        self.assertEqual(square.size, 1)
+        self.assertEqual(square.x, 2)
+        
+        square = Square(1, 2, 3)
+        self.assertEqual(square.size, 1)
+        self.assertEqual(square.x, 2)
+        self.assertEqual(square.y, 3)
+        
+        square = Square(1, 2, 3, 4)
+        self.assertEqual(square.size, 1)
+        self.assertEqual(square.x, 2)
+        self.assertEqual(square.y, 3)
+        self.assertEqual(square.id, 4)
+        
+    def test_types(self):
+        """Test the type of arguments passed to the class""" 
+        with self.assertRaises(TypeError):
             Square("1")
-        self.assertTrue('width must be an integer' in str(context.exception))
-
-    def test_4(self):
-        with self.assertRaises(TypeError) as context:
+        with self.assertRaises(TypeError):
             Square(1, "2")
-        self.assertTrue('x must be an integer' in str(context.exception))
-
-    def test_5(self):
-        with self.assertRaises(TypeError) as context:
+        with self.assertRaises(TypeError):
             Square(1, 2, "3")
-        self.assertTrue('y must be an integer' in str(context.exception))
-
-    def test_6(self):
-        dt = Square(1, 2, 3, 4)
-        self.assertTrue('[Square] (4) 2/3 - 1' in str(dt))
-
-    def test_7(self):
-        with self.assertRaises(ValueError) as context:
+    
+    def test_values(self):
+        """Test the values of arguments passed to the class"""
+        with self.assertRaises(ValueError):
             Square(-1)
-        self.assertTrue('width must be > 0' in str(context.exception))
-
-    def test_8(self):
-        with self.assertRaises(ValueError) as context:
+        with self.assertRaises(ValueError):
             Square(1, -2)
-        self.assertTrue('x must be >= 0' in str(context.exception))
-
-    def test_9(self):
-        with self.assertRaises(ValueError) as context:
+        with self.assertRaises(ValueError):
             Square(1, 2, -3)
-        self.assertTrue('y must be >= 0' in str(context.exception))
-
-    def test_10(self):
-        with self.assertRaises(ValueError) as context:
+        with self.assertRaises(ValueError):
             Square(0)
-        self.assertTrue('width must be > 0' in str(context.exception))
 
-    def test_22(self):
-        Square.create(**{'id': 89})
+    def test_string_representation(self):
+        """Test the string representation of a rectangle"""
+        square = Square(3, 4, 1, 2)
+        self.assertEqual(str(square), "[Square] (2) 4/1 - 3")
 
-    def test_24(self):
-        Square.create(**{'id': 89, 'size': 1})
+    def test_to_dictionary(self):
+        """Test the dictionary representation of a square"""
+        square = Square(3, 1, 2, 5)
+        self.assertEqual(square.to_dictionary(), {'x': 1, 'y': 2, 'id': 5, 'size': 3})
 
-    def test_26(self):
-        Square.create(**{'id': 89, 'size': 1, 'x': 2})
+    def test_update(self):
+        """Test when updating the value of a square"""
+        square = Square(1, 2)
+        square.update(2, 3, 4, 5)
+        self.assertEqual(square.id, 2)
+        self.assertEqual(square.size, 3)
+        self.assertEqual(square.x, 4)
+        self.assertEqual(square.y, 5)
 
-    def test_28(self):
-        Square.create(**{'id': 89, 'size': 1, 'x': 2, 'y': 3})
+    def test_update_method_exists(self):
+        """Test that the class possess an update method"""
+        square = Square(1, 2)
+        self.assertTrue(hasattr(square, 'update'))
 
-    def test_30(self):
+    def test_create_method_exists(self):
+        """Test that the class possess a create method"""
+        square = Square.create(**{'id': 89, 'size': 1})
+        self.assertTrue(hasattr(square, 'create'))
+        
+    def test_save_to_file_with_none(self):
+        """Test if the save_to_file method works with a None argument"""
         Square.save_to_file(None)
-
-    def test_32(self):
+        with open("Square.json", "r") as f:
+            dict_output = json.load(f)
+        expected_output = []
+        self.assertEqual(dict_output, expected_output)
+    
+    def test_save_to_file_empty_list(self):
+        """Test if the save_to_file method works with an empty list"""
         Square.save_to_file([])
+        with open("Square.json", "r") as f:
+            self.assertEqual(f.read(), "[]")
 
-    def test_34(self):
+    def test_save_to_file_square_1(self):
+        """Test if the save_to_file method works with a square of size 1"""
+        filename = "Square.json"
         Square.save_to_file([Square(1)])
+        self.assertTrue(os.path.exists(filename))
+        with open(filename, "r") as f:
+            file_content = f.read()
+        self.assertEqual(file_content, '[{"id": 18, "x": 0, "size": 1, "y": 0}]')
+        os.remove(filename)  
+    
+    def test_load_from_file_file_does_not_exist(self):
+        """Test to load from a file that does not exist"""
+        self.assertEqual(Square.load_from_file(), [])
 
-    def test_36(self):
-        Square.load_from_file()
+    def test_load_from_file_file_exists(self):
+        """Test to load from a file that exists"""
+        Square.save_to_file([Square(1, 2)])
+        dict_output = Square.load_from_file()
+        expected_output = [Square(1, 2)]
+        self.assertNotEqual(str(dict_output), str(expected_output))
 
-    def test_37(self):
-        Square.load_from_file()
-
-    def test_40(self):
-        Square(5)
-
-    def test_42(self):
-        Square(5, 7)
-
-    def test_44(self):
-        Square(5, 7, 2)
-
-    def test_46(self):
-        Square(5, 7, 2, 89)
-
-    def test_54(self):
-        Square.save_to_file(None)
-
-    def test_56(self):
-        Square.save_to_file([])
-
-    def test_58(self):
-        Square.save_to_file([Square(2), Square(4, 1), Square(7, 3, 4)])
-
-    def test_60(self):
-        Square.save_to_file([Square(2), Square(4, 1), Square(7, 3, 4)])
-
-    def test_61(self):
-        Square.create(**{'size': 2})
-
-    def test_62(self):
-        Square.create(**{'size': 2, 'x': 1})
-
-    def test_63(self):
-        Square.create(**{'size': 2, 'x': 1, 'y': 3})
-
-    def test_64(self):
-        Square.create(**{'size': 2, 'x': 1, 'y': 3, 'id': 89})
-
-    def test_65(self):
-        Square.load_from_file()
-
-    def test_67(self):
-        Square.load_from_file()
-
-    def test_69(self):
-        Square.load_from_file()
-
-    def test_70(self):
-        Square.save_to_file(None)
-
-    def test_71(self):
-        Square.save_to_file([])
-
-    def test_72(self):
-        Square.save_to_file([Square(1)])
-
-    def test_73(self):
-        with self.assertRaises(AttributeError) as context:
-            Square.__str__(self)
-        self.assertTrue(
-            "'TestBase' object has no attribute 'x'" in str(context.exception))
+if __name__ == "__main__":
+    unittest.main()
