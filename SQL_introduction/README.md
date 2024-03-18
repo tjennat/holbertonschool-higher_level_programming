@@ -1,0 +1,1 @@
+This is goin to be my dir to learn SQL and databases 
